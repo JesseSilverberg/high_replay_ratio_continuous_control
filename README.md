@@ -8,6 +8,16 @@ The codebase is mostly based on [jaxrl](https://github.com/ikostrikov/jaxrl) and
 - **Parallelization over multiple seeds on a single GPU**: multiple seeds are run in parallel by sequentially generating data from each seed's environment but generating new actions and processing updates for all seeds in parallel on the GPU 
 - **Off-the-shelf checkpointing**: a simple checkpointing and loading mechanism is provided
 
+# Installation
+
+```
+pip install --upgrade pip
+pip install -U "jax[cpu]" # or something else if you need accelerator support. See JAX docs for information.
+pip install tqdm absl-py optax ml-collections mujoco dm-control wandb gymnasium imageio flax tensorflow-probability brax
+```
+
+# Usage
+
 
 Example usage:
 

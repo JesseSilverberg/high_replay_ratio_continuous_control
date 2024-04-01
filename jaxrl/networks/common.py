@@ -62,7 +62,7 @@ class Model:
                tx: Optional[optax.GradientTransformation] = None) -> 'Model':
         variables = model_def.init(*inputs)
 
-        _, params = variables.pop('params')
+        _, params = flax.core.pop(variables, 'params')
 
         if tx is not None:
             opt_state = tx.init(params)

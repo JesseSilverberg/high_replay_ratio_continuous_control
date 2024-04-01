@@ -8,7 +8,7 @@ from typing import Dict, Optional, OrderedDict
 import numpy as np
 from dm_control import suite
 from dm_env import specs
-from gym import core, spaces
+from gymnasium import core, spaces
 
 from jaxrl.wrappers.common import TimeStep
 
@@ -50,7 +50,8 @@ class DMCEnv(core.Env):
         self.observation_space = dmc_spec2gym_space(
             self._env.observation_spec())
 
-        self.seed(seed=task_kwargs['random'])
+        self.action_space.seed(task_kwargs['random'])
+        self.observation_space.seed(task_kwargs['random'])
 
     def __getattr__(self, name):
         return getattr(self._env, name)
@@ -67,11 +68,11 @@ class DMCEnv(core.Env):
         if done and time_step.discount == 1.0:
             info['TimeLimit.truncated'] = True
 
-        return obs, reward, done, info
+        return obs, reward, done, done and time_step.discount == 1.0, info
 
-    def reset(self):
+    def reset(self, seed=None, options=None):
         time_step = self._env.reset()
-        return time_step.observation
+        return time_step.observation, {}
 
     def render(self,
                mode='rgb_array',

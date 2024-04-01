@@ -4,7 +4,6 @@ import gym
 
 from jaxrl.networks.common import Model
 import jax.numpy as jnp
-from jax.random import KeyArray
 from typing import Callable
 import jax
 from functools import partial
@@ -13,7 +12,7 @@ from functools import partial
 @partial(jax.jit, static_argnums=(1, 2, 3, 5))
 @partial(jax.vmap, in_axes=(0, None, None, None, 0, None))
 def evaluate_brax(actor: Model, eval_step_fn: Callable, eval_reset_fn: Callable,
-                  num_episodes: int, rng: KeyArray, episode_length: int = 1000) -> Dict[str, float]:
+                  num_episodes: int, rng: jax.Array, episode_length: int = 1000) -> Dict[str, float]:
     rng, key = jax.random.split(rng)
     state = eval_reset_fn(rng=key)
     def one_step(i, state_ret):

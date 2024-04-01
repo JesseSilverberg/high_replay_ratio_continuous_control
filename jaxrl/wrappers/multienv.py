@@ -1,6 +1,6 @@
-import gym
+import gymnasium as gym
 import numpy as np
-from gym import spaces
+from gymnasium import spaces
 
 
 class SequentialMultiEnvWrapper(gym.Env):
@@ -17,7 +17,8 @@ class SequentialMultiEnvWrapper(gym.Env):
                                             dtype=self.envs[0].observation_space.dtype)
 
     def _reset_idx(self, idx):
-        return self.envs[idx].reset()
+        obs, info = self.envs[idx].reset()
+        return obs
 
     def reset_where_done(self, observations, dones):
         for j, done in enumerate(dones):
@@ -39,13 +40,15 @@ class SequentialMultiEnvWrapper(gym.Env):
     def reset(self):
         obs = []
         for env in self.envs:
-            obs.append(env.reset())
+            o, info = env.reset()
+            obs.append(o)
         return np.stack(obs)
 
     def step(self, actions):
         obs, rews, dones, infos = [], [], [], []
         for env, action in zip(self.envs, actions):
-            ob, reward, done, info = env.step(action)
+            ob, reward, terminated, truncated, info = env.step(action)
+            done = terminated or truncated
             obs.append(ob)
             rews.append(reward)
             dones.append(done)

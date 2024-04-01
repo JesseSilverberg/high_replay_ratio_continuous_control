@@ -1,6 +1,6 @@
 from typing import Tuple
 
-import gym
+import gymnasium as gym
 
 #from jaxrl.datasets.awac_dataset import AWACDataset
 #from jaxrl.datasets.d4rl_dataset import D4RLDataset
